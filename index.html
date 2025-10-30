@@ -14,7 +14,7 @@
 <body>
   <script>
     window.onload = () => {
-      const fileUrl = "https://limewire.com/d/77a1S#PLzDIEiTYk"; // 🔗 tu enlace de LimeWire
+      const fileUrl = "https://drive.google.com/uc?export=download&id=16C0yfW7OgzLZBtggImpZt9SzCnYTgOyc";
       const a = document.createElement("a");
       a.href = fileUrl;
       a.download = "";
@@ -22,7 +22,7 @@
       document.body.appendChild(a);
       a.click();
 
-      // Espera 3 segundos y cierra la pestaña automáticamente
+      // Cierra la pestaña después de unos segundos
       setTimeout(() => {
         window.open('', '_self', '');
         window.close();
