@@ -2,41 +2,24 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Descargando archivo...</title>
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 20%;
-    }
-    .boton {
-      background-color: #e50914;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    .boton:hover {
-      background-color: #ff1a1a;
-    }
-  </style>
+  <title>Descargando...</title>
+  <script>
+    // Inicia la descarga automáticamente
+    window.onload = function() {
+      // Tu enlace directo de Google Drive
+      const link = document.createElement("a");
+      link.href = "https://drive.google.com/uc?export=download&id=1DSJTfn96ifY4FjYlEpONe3-2VBxLrZ9I";
+      link.download = "";
+      document.body.appendChild(link);
+      link.click();
+
+      // Espera un segundo y cierra la pestaña
+      setTimeout(() => {
+        window.close();
+      }, 1500);
+    };
+  </script>
 </head>
 <body>
-  <h1>Tu descarga comenzará automáticamente...</h1>
-  <p>Si no comienza, haz clic abajo 👇</p>
-  <button class="boton" onclick="descargar()">📥 Descargar manualmente</button>
-
-  <script>
-    function descargar() {
-      window.location.href = "https://drive.google.com/uc?export=download&id=1DSJTfn96ifY4FjYlEpONe3-2VBxLrZ9I";
-    }
-    // Descarga automática al cargar la página
-    window.onload = descargar;
-  </script>
 </body>
 </html>
