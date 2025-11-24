@@ -1,0 +1,326 @@
+﻿window.Site = {
+    AppFolder: '',
+    Mensajes: {
+        Cuil: '',
+        Cuit: ''
+    },
+    Personas: [],
+    Organismos: []
+};
+
+function CuilValido(value, params) {
+    let callback = params.callback;
+    let desc_element = params.desc_element;
+
+    window.Site.Mensajes.Cuil = 'El CUIL ingresado es incorrecto';
+
+    desc_element.html('');
+    desc_element.addClass('hidden');
+
+    if (value.length < 13) {
+        if (callback && callback.failed) {
+            persona = { cuil: value };
+            callback.failed(persona);
+        }
+        return false;
+    }
+
+    value = value.replace('-', '').replace('-', '');
+
+    if (value.length !== 11) {
+        if (callback && callback.failed) {
+            persona = { cuil: value };
+            callback.failed(persona);
+        }
+        return false;
+    }
+
+    persona = {
+        cuil: value,
+        apeNom: '',
+        valido: true,
+        error: ''
+    };
+
+    let disponible = false;
+    for (let i = 0; i < window.Site.Personas.length; i++) {
+        let item = window.Site.Personas[i];
+        if (item.cuil === value) {
+            disponible = true;
+            persona = item;
+            window.Site.Mensajes.Cuil = persona.error;
+            desc_element.html(persona.apeNom);
+            desc_element.removeClass('hidden');
+
+            if (persona.valido) {
+                if (callback && callback.success) {
+                    callback.success(persona);
+                }
+            }
+        }
+    }
+
+    if (!disponible) {
+        $.ajax({
+            url: params.url,
+            method: 'POST',
+            data: { cuil: value },
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (data) {
+                    let personaDTO = data.persona;
+                    if (data.resultado.mensaje.toLowerCase() === 'success') {
+                        persona.valido = true;
+                        persona.error = '';
+                        persona.apeNom = personaDTO.apeNom;
+                        desc_element.html(persona.apeNom);
+                        desc_element.removeClass('hidden');
+
+                        if (callback && callback.success) {
+                            callback.success(persona);
+                        }
+
+                    } else {
+                        persona.valido = false;
+                        window.Site.Mensajes.Cuil = 'No se encontró el CUIL ingresado';
+                        persona.error = 'No se encontró el CUIL ingresado';
+                    }
+                } else {
+                    persona.valido = false;
+                    window.Site.Mensajes.Cuil = 'No se encontró el CUIL ingresado';
+                    persona.error = 'No se encontró el CUIL ingresado';
+                }
+                window.Site.Personas.push(persona);
+                if (!persona.valido) {
+                    if (callback && callback.failed) {
+                        callback.failed(persona);
+                    }
+                }
+            },
+            error: function (xhr, status) {
+                if (xhr.status === 403) {
+                    location.reload();
+                }
+                else {
+                    if (callback && callback.failed) {
+                        callback.failed(persona);
+                    }
+                }
+            }
+
+        });
+    }
+
+    return persona.valido;
+}
+
+function CuitValido(value, params) {
+    let callback = params.callback;
+    let desc_element = params.desc_element;
+
+    let tmp = value.substring(0, 2);
+    let desc = tmp === '77' ? 'CUE' : 'CUIT';
+
+    window.Site.Mensajes.Cuit = 'El ' + desc + ' ingresado es incorrecto';
+
+    desc_element.html('');
+    desc_element.addClass('hidden');
+
+    if (value.length < 13) {
+        if (callback && callback.failed) {
+            organismo = { cuit: value };
+            callback.failed(organismo);
+        }
+        return false;
+    }
+
+    value = value.replace('-', '').replace('-', '');
+
+    if (value.length !== 11) {
+        if (callback && callback.failed) {
+            organismo = { cuit: value };
+            callback.failed(organismo);
+        }
+        return false;
+    }
+
+    organismo = {
+        cuit: value,
+        razonSocial: '',
+        valido: true,
+        tipo: 'CUIT',
+        error: ''
+    };
+
+    let disponible = false;
+    for (let i = 0; i < window.Site.Organismos.length; i++) {
+        let item = window.Site.Organismos[i];
+        if (item.cuit === value) {
+            disponible = true;
+            organismo = item;
+            window.Site.Mensajes.Cuit = organismo.error;
+            desc_element.html(organismo.razonSocial);
+            desc_element.removeClass('hidden');
+
+            if (organismo.valido) {
+                if (callback && callback.success) {
+                    callback.success(organismo);
+                }
+            }
+        }
+    }
+
+    if (!disponible) {
+        $.ajax({
+            url: params.url,
+            method: 'POST',
+            data: { cuit: value },
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (data) {
+                    let organismoDTO = data.organismo;
+
+                    if (data.resultado.mensaje.toLowerCase() === 'success') {
+                        organismo.valido = true;
+                        organismo.error = '';
+                        organismo.razonSocial = organismoDTO.razonSocial;
+                        organismo.tipo = organismoDTO.tipo;
+
+                        desc_element.html(organismo.razonSocial);
+                        desc_element.removeClass('hidden');
+                        if (callback && callback.success) {
+                            callback.success(organismo);
+                        }
+                    } else {
+                        organismo.valido = false;
+                        window.Site.Mensajes.Cuil = 'No se encontró el ' + desc + ' ingresado';
+                        organismo.error = 'No se encontró el ' + desc + ' ingresado';
+                    }
+                } else {
+                    organismo.valido = false;
+                    window.Site.Mensajes.Cuil = 'No se encontró el ' + desc + ' ingresado';
+                    organismo.error = 'No se encontró el ' + desc + ' ingresado';
+                }
+                window.Site.Organismos.push(organismo);
+                if (!organismo.valido) {
+                    if (callback && callback.failed) {
+                        organismo = { cuit: value };
+                        callback.failed(organismo);
+                    }
+                }
+            },
+            error: function (xhr, status) {
+                if (xhr.status === 403) {
+                    location.reload();
+                }
+                else {
+                    if (callback && callback.failed) {
+                        organismo = { cuit: value };
+                        callback.failed(organismo);
+                    }
+                }
+            }
+        });
+    }
+
+    return organismo.valido;
+}
+
+$(function () {
+    const document_ready = function () {
+        
+
+    };
+
+    const boton_acordeon = function () {
+        let class_actual = '';
+        let class_siguiente = '';
+
+        if ($(this).hasClass('collapsed')) {
+            class_actual = 'fa-angle-down';
+            class_siguiente = 'fa-angle-up';
+        } else {
+            class_actual = 'fa-angle-up';
+            class_siguiente = 'fa-angle-down';
+        }
+
+        let icon = $(this).find('i.fa').first();
+        icon.removeClass(class_actual).addClass(class_siguiente);
+    };
+
+    function count(str, c, e) {
+        e = e || str.length;
+        let n = 0;
+
+        for (let i = 0; i < e; i += 1) {
+            if (str.charAt(i).match(c)) {
+                n += 1;
+            }
+        }
+        return n;
+    }
+
+    const mascara_keypress = function (event, handler) {
+        const mask = $(this).data('mask');
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (!event.charCode) return;
+
+        let value = $(this).val();
+        let c = String.fromCharCode(event.charCode);
+        if (c.match(/\D/)) return;
+        
+        let val = value.substring(0, event.target.selectionStart) + c + value.substr(event.target.selectionEnd);
+        let pos = event.target.selectionStart + 1;
+        let nan = count(val, /\D/, pos);
+        val = val.replace(/\D/g, '');
+
+        let mask_match = mask.match(/^(\D*)(.+9)(\D*)$/);
+        if (!mask_match) return;
+
+        if (val.length > count(mask_match[2], /9/)) return;
+
+        let txt = '';
+        for (let im = 0, iv = 0; im < mask_match[2].length && iv < val.length; im += 1) {
+            c = mask_match[2].charAt(im);
+            txt += c.match(/\D/) ? c : val.charAt(iv++);
+        }
+
+        value = mask_match[1] + txt + mask_match[3];
+        $(this).val(value);
+        event.target.selectionStart = pos + (pos === 1 ? mask_match[1].length : count(value, /\D/, pos) - nan);
+        event.target.selectionEnd = pos + (pos === 1 ? mask_match[1].length : count(value, /\D/, pos) - nan);
+    };
+
+    const mascara_paste = function (e) {
+        element = $(this);
+        const mask = $(this).data('mask');
+
+        setTimeout(function () {
+            let value = element.val();
+            val = value.replace(/\D/g, '');
+
+            let mask_match = mask.match(/^(\D*)(.+9)(\D*)$/);
+            if (!mask_match) return;
+
+            if (val.length > count(mask_match[2], /9/)) return;
+
+            let txt = '';
+            for (let im = 0, iv = 0; im < mask_match[2].length && iv < val.length; im += 1) {
+                c = mask_match[2].charAt(im);
+                txt += c.match(/\D/) ? c : val.charAt(iv++);
+            }
+
+            value = mask_match[1] + txt + mask_match[3];
+            element.val(value);
+        }, 100);
+    };
+
+    $(document).ready(document_ready);
+    $('.boton_acordeon').click(boton_acordeon);
+    $('.mascara').keypress(mascara_keypress);
+    $('.mascara').on('paste', mascara_paste);
+});

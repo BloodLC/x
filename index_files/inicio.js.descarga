@@ -1,0 +1,22 @@
+﻿$(function () {
+    let form = $("#form-inicio");
+    let e_cuil = $("#Cuil");
+    let e_cuil_error = $("#Cuil-error");
+
+    const form_submit = function () {
+        let valid = true;
+        let cuil_val = e_cuil.val();
+
+        e_cuil_error.html('');
+        cuil_val = cuil_val.replace('-', '').replace('-', '');
+
+        if (isNaN(cuil_val) || (cuil_val.length !== 11 && cuil_val.length !== 10)) {
+            e_cuil_error.html('Debe ingresar CUIL para poder continuar');
+            valid = false;
+        }
+
+        return valid;
+    };
+
+    form.submit(form_submit);
+});

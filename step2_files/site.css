@@ -1,0 +1,62 @@
+﻿footer.page-footer{
+    position: fixed;
+    bottom: 0px;
+}
+
+.container main{
+    margin-bottom: 100px;
+}
+
+.form-group .control-label{
+    color: #A8A8A8;
+    font-size: 30px;
+}
+
+.form-group .form-control{
+    box-shadow: none;
+    height: 48px;
+}
+
+.col-right{
+    text-align: right;
+}
+
+/* LG */
+@media (min-width: 1200px) {
+    footer.page-footer{
+        position: fixed;
+        bottom: 0px;
+    }
+}
+
+/* MD */
+@media (max-width: 1199px) and (min-width: 992px) {
+    
+}
+
+/* SM */
+@media (max-width: 991px) and (min-width: 768px) {
+   
+}
+
+/* XS */
+@media (max-width: 767px) {
+   footer.page-footer{
+        position: relative;
+    }
+
+    @media (min-height: 640px) {
+        footer.page-footer.home {
+            position: fixed;
+            bottom: 0px;
+        }
+    }
+
+   .container main{
+        margin-bottom: 0;
+    }
+
+   .container main.home{
+        margin-bottom: 100px;
+    }
+}
